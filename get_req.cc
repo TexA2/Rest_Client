@@ -17,11 +17,12 @@ static size_t write_data(void *ptr, size_t size, size_t nmemb, void *stream)
 // p10
 // p9
 // sisyphus
+// arch = aarch64
 
 int createfile(FILE **bodyfile)
 {
  /* open the body file */
-  static const char *bodyfilename = "body.out";
+  static const char *bodyfilename = "body.json";
 
   *bodyfile = fopen(bodyfilename, "wb");
 
@@ -33,11 +34,13 @@ int createfile(FILE **bodyfile)
   return 1;
 }
 
+
+
 int main(void){
 
  /* open the body file */
-  static const char *bodyfilename = "body.out";                       // за место стастического именени у пользователя надо запрашивать какую он ветку хочет посмотреть
-                                                                      // и результат сохранять в эту ветку
+  //static const char *bodyfilename = "body.out";                       // за место стастического именени у пользователя надо запрашивать какую он ветку хочет посмотреть
+                                                                        // и результат сохранять в эту ветку
   FILE *bodyfile;
 
   createfile (&bodyfile);                                             // добавить обработчик ошибки -1;
@@ -53,8 +56,9 @@ int main(void){
 
   //string uri = "http://ip-api.com/json/24.48.0.1";
   string uri = "https://rdb.altlinux.org/api/export/branch_binary_packages/";
-  string brach = "p10";
+  string brach = "p9";
   string query = uri + brach;
+
 
   curl_easy_setopt(curl, CURLOPT_URL, query.c_str());                   // URL адрес для передачи в url засунум сразу нагрузку и получим uri
  
