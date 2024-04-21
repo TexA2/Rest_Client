@@ -1,16 +1,19 @@
 all: main
 
-main: get_req.o dser.o cli.o
-	g++ main.cc get_req.o dser.o cli.o -lcurl -o start
+main: librestclient.so
+	g++ -L./ -Wl,-rpath=./  main.cc -lrestclient -lcurl -o start
+
+librestclient.so: get_req.o dser.o cli.o
+	g++ -shared get_req.o dser.o cli.o -o librestclient.so
 
 get_req.o: get_req.cc
-	g++ -c get_req.cc
+	g++ -fPIC -c get_req.cc
 
 dser.o: dser.cc
-	g++ -c dser.cc
+	g++ -fPIC -c dser.cc
 
 cli.o: cli.cc
-	g++ -c cli.cc
+	g++ -fPIC -c cli.cc
 
 clean:
 	rm -rf *.o
