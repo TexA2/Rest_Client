@@ -30,29 +30,15 @@ struct Packages
 
 };
 
-//getRequest("p9","aarch64");
-//getRequest("p10","aarch64");
-//string filename = branch + ".json";
-
-
-/*
-значения key
-1 - есть только в первой ветке
-2 - есть только во второй ветке
-
-// Показатели version_release в процессе
-3 - есть в 1 и 2 но релиз больше в 1
-4 - есит в 1 и 2 но релиз больше в 2
-*/
-
-void Deserialization_File (map<Packages, int> &map_pack, string branch, int number = 1)    //передать ссылку на MAP, и название файла number = каким это был пакет по очереди
+void Deserialization_File (map<Packages, int> &map_pack, string branch, int number = 1)  
+// map_pack -  ссылка на объект map<Packages, int>
+// branch - название ветки (а точнее  json файла в которм хранится информация о ветке)
+// number - номер запроса (1 - первый запрос т.е рабоать с первой веткой), 2- второй запрос т.е работать со второй веткой
 {
-    std::ifstream file(branch + ".json");   // открываем файл
+    ifstream file(branch + ".json");   // открываем файл
     nlohmann::json j;                       // создаем json объект 
     j = nlohmann::json::parse(file);        // парсим его
 
-
-/*находим сразу чтобы в цикле каждый раз не высчитывать*/
     auto it_j = j["packages"].begin();  // начало массива с пакетами 
     auto eit_j = j["packages"].end();   // конец массива с пакетами
 
@@ -64,7 +50,7 @@ void Deserialization_File (map<Packages, int> &map_pack, string branch, int numb
         string version = (*(it_j))["version"].get<string>();
         string release = (*(it_j))["release"].get<string>();
 
-        Packages p1{name+arch, version+release};
+        Packages p1{name+"_"+arch, version+release};
         
         p1.name = (*(it_j))["name"].get<string>();
         p1.epoch = (*(it_j))["epoch"].get<int>();
@@ -84,8 +70,41 @@ void Deserialization_File (map<Packages, int> &map_pack, string branch, int numb
             if (res->first.version_release < p1.version_release) res->second++;
         }   
     }
-    
+    file.close();
+}
 
+void serialization_File(map<Packages, int> &map_pack, int status)
+// map_pack -  ссылка на объект map<Packages, int>
+// status какую сортировку нам вывести :
+/*1 - пакет существует только в первой ветке
+2 - пакет существует только во второй ветке
+3 - пакет существует в 1 и 2, но version_release  больше в 1
+4 - пакет существует в 1 и 2, но version_release  больше в 2
+*/
+{
+    ofstream file("res.json");
+    nlohmann::json j;
+    string str;
+
+    for (auto it = map_pack.begin() ; it != map_pack.end(); ++it)
+    {
+       if (it->second == status) 
+       {
+            j["name"]= it->first.name;
+            j["epoch"] = it->first.epoch;
+            j["version"] = it->first.version;
+            j["release"] = it->first.release;
+            j["arch"] = it->first.arch;
+            j["disttag"] = it->first.disttag;
+            j["buildtime"] = it->first.buildtime;
+            j["source"] = it->first.source;
+
+            str = j.dump();
+
+            file << str << '\n';
+       }
+    }
+    file.close();
 }
 
 
@@ -95,6 +114,8 @@ int main(){
 
     Deserialization_File(map_pack, "p10");
     Deserialization_File(map_pack, "p9", 2);
+
+    serialization_File(map_pack,1);
 
 /*проверка что все сработало*/
     for (auto it = map_pack.begin() ; it != map_pack.end(); ++it)
