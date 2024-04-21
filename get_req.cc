@@ -7,23 +7,19 @@
 
 using namespace std;
 
+ const string url = "https://rdb.altlinux.org/api/export/branch_binary_packages/";
+
 static size_t write_data(void *ptr, size_t size, size_t nmemb, void *stream)
+// call-back функция для записи данных в файл
 {
   size_t written = fwrite(ptr, size, nmemb, (FILE *)stream);
   return written;
 }
  
-// https://rdb.altlinux.org/api/export/branch_binary_packages/
-// p10
-// p9
-// sisyphus
-// arch = aarch64
-
-int createfile(FILE **bodyfile)
+int createfile(FILE **bodyfile, const char *bodyfilename)
+//функция создает файл формата json с именем запрашиваемой ветки
 {
- /* open the body file */
-  static const char *bodyfilename = "body.json";
-
+ 
   *bodyfile = fopen(bodyfilename, "wb");
 
   if(!(*bodyfile))
@@ -34,16 +30,11 @@ int createfile(FILE **bodyfile)
   return 1;
 }
 
-
-
-int main(void){
-
- /* open the body file */
-  //static const char *bodyfilename = "body.out";                       // за место стастического именени у пользователя надо запрашивать какую он ветку хочет посмотреть
-                                                                        // и результат сохранять в эту ветку
+void getRequest(string branch, string arch = "") 
+{
   FILE *bodyfile;
-
-  createfile (&bodyfile);                                             // добавить обработчик ошибки -1;
+  string filename = branch + ".json";
+  createfile (&bodyfile, filename.c_str());  
 
   CURL *curl;
 
@@ -52,24 +43,31 @@ int main(void){
 
   struct curl_slist *slist1 = NULL;                                   // Создаем список заголовков
   slist1 = curl_slist_append(slist1, "Accept: application/json");     // Заголовок котрый сообщает Серверу что, клиент хочет получить ответ в формате json
-  curl_easy_setopt(curl, CURLOPT_HTTPHEADER, slist1);                 // Добавляем список заголовков в запрос
+  curl_easy_setopt(curl, CURLOPT_HTTPHEADER, slist1);                 // Добавляем список заголовков в запрос  
 
-  //string uri = "http://ip-api.com/json/24.48.0.1";
-  string uri = "https://rdb.altlinux.org/api/export/branch_binary_packages/";
-  string brach = "p9";
-  string query = uri + brach;
+  string query = url + branch;
+
+  if (arch != "")
+   query += + "?arch="+ arch;
 
 
   curl_easy_setopt(curl, CURLOPT_URL, query.c_str());                   // URL адрес для передачи в url засунум сразу нагрузку и получим uri
  
   curl_easy_setopt(curl, CURLOPT_NOPROGRESS, 0);                        // включаем анимацию загрузки
   curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_data);
-  curl_easy_setopt(curl, CURLOPT_WRITEDATA, bodyfile);
+  curl_easy_setopt(curl, CURLOPT_WRITEDATA, bodyfile);                  // bodyfile - название файла
 
   curl_easy_perform(curl);                                            // отправляем запрос
- 
+
   fclose(bodyfile);                                                   // закрываем файл
   curl_easy_cleanup(curl);                                            // закрываем дескриптов CURL
- 
+}
+
+
+int main(void){
+
+  getRequest("p9","aarch64");
+  getRequest("p10","aarch64");
+
   return 0;
 }
