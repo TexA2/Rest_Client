@@ -4,36 +4,10 @@
 #include <nlohmann/json.hpp>
 #include <fstream>
 #include <map>
+#include "dser.h"
 
-using namespace std;
 
-struct Packages
-{
-    string key_name;
-    string version_release;
-    string name;
-    string version;
-    string release;
-    string arch;
-    string disttag;
-    string source;
-    int epoch;
-    int buildtime;
-
-    Packages(string kname, string ver_rel) : key_name {kname} , version_release { ver_rel }
-    {}
-
-    bool operator <(const Packages& rhs) const
-    {
-        return this->key_name < rhs.key_name;
-    }
-
-};
-
-void Deserialization_File (map<Packages, int> &map_pack, string branch, int number = 1)  
-// map_pack -  ссылка на объект map<Packages, int>
-// branch - название ветки (а точнее  json файла в которм хранится информация о ветке)
-// number - номер запроса (1 - первый запрос т.е рабоать с первой веткой), 2- второй запрос т.е работать со второй веткой
+void Deserialization_File (map<Packages, int> &map_pack, string branch, int number)  
 {
     ifstream file(branch + ".json");   // открываем файл
     nlohmann::json j;                       // создаем json объект 
@@ -74,13 +48,6 @@ void Deserialization_File (map<Packages, int> &map_pack, string branch, int numb
 }
 
 void serialization_File(map<Packages, int> &map_pack, int status)
-// map_pack -  ссылка на объект map<Packages, int>
-// status какую сортировку нам вывести :
-/*1 - пакет существует только в первой ветке
-2 - пакет существует только во второй ветке
-3 - пакет существует в 1 и 2, но version_release  больше в 1
-4 - пакет существует в 1 и 2, но version_release  больше в 2
-*/
 {
     ofstream file("res.json");
     nlohmann::json j;
@@ -102,25 +69,11 @@ void serialization_File(map<Packages, int> &map_pack, int status)
             str = j.dump();
 
             file << str << '\n';
+
+            cout << str << endl;
        }
     }
+
+    cout << "A file responses has been generated res.json" << endl;
     file.close();
-}
-
-
-int main(){
-
-    map<Packages, int> map_pack;
-
-    Deserialization_File(map_pack, "p10");
-    Deserialization_File(map_pack, "p9", 2);
-
-    serialization_File(map_pack,1);
-
-/*проверка что все сработало*/
-    for (auto it = map_pack.begin() ; it != map_pack.end(); ++it)
-        cout << it->first.key_name << '\t' << it->second << endl;
-
-
-    return 0;
 }

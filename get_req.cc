@@ -4,12 +4,12 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <curl/curl.h>
+#include "get_req.h"
 
-using namespace std;
+//using namespace std;
+//const string url = "https://rdb.altlinux.org/api/export/branch_binary_packages/";
 
- const string url = "https://rdb.altlinux.org/api/export/branch_binary_packages/";
-
-static size_t write_data(void *ptr, size_t size, size_t nmemb, void *stream)
+size_t write_data(void *ptr, size_t size, size_t nmemb, void *stream)
 // call-back функция для записи данных в файл
 {
   size_t written = fwrite(ptr, size, nmemb, (FILE *)stream);
@@ -30,7 +30,7 @@ int createfile(FILE **bodyfile, const char *bodyfilename)
   return 1;
 }
 
-void getRequest(string branch, string arch = "") 
+void getRequest(string branch, string arch) 
 {
   FILE *bodyfile;
   string filename = branch + ".json";
@@ -61,13 +61,4 @@ void getRequest(string branch, string arch = "")
 
   fclose(bodyfile);                                                   // закрываем файл
   curl_easy_cleanup(curl);                                            // закрываем дескриптов CURL
-}
-
-
-int main(void){
-
-  getRequest("p9","aarch64");
-  getRequest("p10","aarch64");
-
-  return 0;
 }
