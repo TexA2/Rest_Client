@@ -1,7 +1,7 @@
 # Rest_Client Utility
 
 **Description**
-Utility for querying 2 branches with lists of binary packages located at [ALT linux Repository](https://rdb.altlinux.org/api/export/branch_binary_packages/{branch}).
+Utility for querying 2 branches with lists of binary packages (export/branch_binary_packages/{branch}) located at [ALT linux Repository](https://rdb.altlinux.org/api/).
 
 **Preparation**
 For the correct compilation of the project, the libraries curl and nlohmann must be installed.
@@ -17,19 +17,20 @@ Switch to superuser mode by using the command (su-)
 1) Clone the repository:
 ``` git clone git@github.com:TexA2/Rest_Client.git ```
 2) Navigate to the project directory
-3) Run the utility with administrator rights (su -) using the make command:
+3) Run the utility  using the make command:
 ``` make ```
-4) To remove object files, use the command:
- ``` make clean ```
+
  
 **Interacting with the program:**
 To start the program, run it from the project folder using the command
 ``` ./start``` 
-The program will prompt you to choose a branch name for the query. If the desired branch is not in the list, the user can specify their own data.
-After selecting the branch, the user will be asked whether they want to select an architecture for that branch. The user can skip this step if desired. If the user chooses to select an architecture, they will be asked to enter it when prompted by the application, which will show a list of possible architectures in advance.
- 
-After entering all the data, the program will download the data from the server.
-Two json files <branch_name>.json will be created in the project folder.
+
+the program asks to chooose the operating mode:
+1) The user writes a full Get request to the server and the received response is written to a file res.json
+2) The user works with the method (export/branch_binary_packages/{branch}) 
+and writes the full request to this method.
+The user is required to form 2 requests. 
+When the requests are sent, the response is saved to files.
  
 Once the files are downloaded, the user will be prompted to choose the type of comparison between two branches:
  
