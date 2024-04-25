@@ -1,10 +1,10 @@
 all: main
 
 main: librestclient.so
-	g++ -L./ -Wl,-rpath=/usr/local/lib/  main.cc -lrestclient -lcurl -o start
+	g++ -L./ -Wl,-rpath=./  main.cc -lrestclient -lcurl -o start
 
 librestclient.so: get_req.o dser.o cli.o
-	g++ -shared get_req.o dser.o cli.o -o /usr/local/lib/librestclient.so
+	g++ -shared get_req.o dser.o cli.o -o librestclient.so
 
 get_req.o: get_req.cc
 	g++ -fPIC -c get_req.cc
