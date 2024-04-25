@@ -30,10 +30,10 @@ int createfile(FILE **bodyfile, const char *bodyfilename)
   return 1;
 }
 
-void getRequest(string branch, string arch) 
+void getRequest(string file_name, string &query) 
 {
   FILE *bodyfile;
-  string filename = branch + ".json";
+  string filename = file_name + ".json";
   createfile (&bodyfile, filename.c_str());  
 
   CURL *curl;
@@ -44,12 +44,6 @@ void getRequest(string branch, string arch)
   struct curl_slist *slist1 = NULL;                                   // Создаем список заголовков
   slist1 = curl_slist_append(slist1, "Accept: application/json");     // Заголовок котрый сообщает Серверу что, клиент хочет получить ответ в формате json
   curl_easy_setopt(curl, CURLOPT_HTTPHEADER, slist1);                 // Добавляем список заголовков в запрос  
-
-  string query = url + branch;
-
-  if (arch != "")
-   query += + "?arch="+ arch;
-
 
   curl_easy_setopt(curl, CURLOPT_URL, query.c_str());                   // URL адрес для передачи в url засунум сразу нагрузку и получим uri
  

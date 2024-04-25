@@ -1,104 +1,110 @@
 #include <iostream>
+#include <cstdlib>
 #include "get_req.h"
 #include "dser.h"
 #include "cli.h"
 
 
-void Show_list_branch()
-{
-    cout << "1: sisyphus" << '\n' << "2: sisyphus_e2k" << '\n' << "3: sisyphus_mipsel" << '\n'
-    << "4: sisyphus_riscv64" << '\n'  << "5: sisyphus_loongarch64" << '\n' << "6: p10" << '\n'
-    << "7: p10_e2k" << '\n'  << "8: p9" << '\n'  << "9: p9_e2k" << '\n'  
-    << "10: p9_mipsel" << '\n'  << "11: p8" << '\n'  << "12: c10f1" << '\n' 
-    << "13: c9f2" << '\n'  << "14: c7" << endl;  
-}   
 
-void Show_list_arch()
+void help_text()
 {
-    cout << "aarch64" << '\n' << "armh" << '\n' << "i586" << '\n'
-    << "noarch" << '\n'  << "ppc64le" << '\n' << "x86_64" << '\n'
-    << "x86_64-i586" << endl;  
+    system("clear");
+   cout << "\e[1;32mdependencies/binary_package_dependencies/{pkghash} \e[0m" << '\n'
+   << "(pkghash* integer) Description: package hash" << "\n\n"
+
+    << "\e[1;32mexport/branch_binary_packages/{branch} \e[0m" << '\n'
+    << "(arch string ) Description: package architecture" << '\n'
+    << "(branch*  string) Description: branch name" << "\n\n"
+
+    << "\e[1;32msite/binary_package_archs_and_versions \e[0m" << '\n'
+    << "(branch* string) Description: branch name" << '\n'
+    << "(name* string) Description: binary package name" << "\n\n"
+
+    << "\e[1;32msite/binary_package_scripts/{pkghash} \e[0m" << '\n'
+    << "(pkghash* integer)" << "\n\n"
+
+    << "\e[1;32msite/pkghash_by_binary_name \e[0m" << '\n'
+    << "(arch*   string ) Description: package arch" << '\n'
+    << "(name*   string ) Description: package name" << '\n'
+    << "(branch* string)  Description: name of packageset"  << '\n' << endl;
+
 }
 
-void initialization_branch(const int &key, string &branch)
+void binary_package(string &uri, string name_file)
 {
-    switch(key)
+    system("clear");
+    while (true)
     {
-        case 1  : branch = "sisyphus"; break;
-        case 2  : branch = "sisyphus_e2k"; break;
-        case 3  : branch = "sisyphus_mipsel"; break;
-        case 4  : branch = "sisyphus_riscv64"; break;
-        case 5  : branch = "sisyphus_loongarch64"; break;
-        case 6  : branch = "p10"; break;
-        case 7  : branch = "p10_e2k"; break;
-        case 8  : branch = "p9"; break;
-        case 9  : branch = "p9_e2k"; break;
-        case 10 : branch = "p9_mipsel"; break;
-        case 11 : branch = "p8"; break;
-        case 12 : branch = "c10f1"; break;
-        case 13 : branch = "c9f2"; break;
-        case 14 : branch = "c9f2"; break;
-        case 0 :  cout << "Input name branch1: " ; cin >> branch; break;
-        default:
-            cout << "Invalid value, close programm" << endl;
-            exit(1); 
+        cout << "Enter  request " << '\n'
+        << "? - for to call help" << '\n'
+        << "0: exit"<< '\n'
+        << "example: \e[1;32mexport/branch_binary_packages/p10\e[0m" << '\n'
+        << "->: ";
+
+        cin >> uri;
+
+        if (uri == "0") exit(1);
+
+        if (uri == "?")
+        {
+            help_text();
+            continue; 
+        }
+
+        string query = url+uri;
+        getRequest(name_file,  query);
+
+        cout << "A file responses has been generated" << name_file<< ".json" << endl;
+        return;
     }
-   
 }
 
-void initialization_arch(const int &key, string &arch)
+int start()
 {
-    switch(key)
+    string uri;
+    string query;
+
+    cout << "Choose an actuin" << '\n'
+    << "1: Run a regular get request" << '\n'
+    << "2: Request for binary packages"<< '\n'
+    << "0: exit"<< '\n'
+    << "->: ";
+
+    int key;
+    cin >> key;
+
+    if (key == 0) return 1;
+
+    if (key == 1 )
     {
-        case 1  : Show_list_arch();
-                  cout << "Input arch: "; 
-                  cin >> arch; break;
-        case 0  : break;
-        default:
-            cout << "Invalid value, close programm" << endl; 
-            exit(1); 
-    }  
-}
+        cout << "Enter a request to the site https://rdb.altlinux.org/api/ " << '\n'
+        << "example: \e[1;32merrata/errata_branches\e[0m" << '\n'
+        << "->: ";
 
-int start(){
+        cin >> uri;
+        query = url+uri;
+        getRequest("res",  query);
+        cout << "A file responses has been generated res.json" << endl;
+        return 1;
+    }
 
-    bool run = true;
-    int key1, key2;
 
-    string firs_branch;
-    string second_branch;
+// работаем с бинарными пакетами
+    if (key == 2)
+    {
+        binary_package(uri, "first");
+        binary_package(uri, "second");
+        exit(1); // убрать ведь дальше пойдет обратка пакетов и их сравнение
+    }
 
-    Show_list_branch();
-    cout << "0: manual input" << endl;
-    cout << "Select the pair branches to search: ";
-
-    cin >> key1 >> key2;
-
-    initialization_branch(key1, firs_branch);
-    initialization_branch(key2, second_branch);
-
-    string first_arch  = "";
-    string second_arch = "";
-
-    cout << "Do you want to set the architecture for the first branch?" << '\n';
-    cout << "1 - yes , 0 - no : ";
-    cin >> key1;
-    initialization_arch(key1,first_arch);
-
-    cout << "Do you want to set the architecture for the second branch?" << '\n';
-    cout << "1 - yes , 0 - no : ";
-    cin >> key2;
-    initialization_arch(key2,second_arch);
-
-// Выполняем Get запрос
-    getRequest(firs_branch, first_arch);
-    getRequest(second_branch, second_arch);
+/*
+// если работаем с бинарными пакетами 
 
     map<Packages, int> map_pack;
 
 // выполняем десериализацию
-    Deserialization_File(map_pack, firs_branch);
-    Deserialization_File(map_pack, second_branch, 2);
+    Deserialization_File(map_pack, "first");
+    Deserialization_File(map_pack, "second", 2);
 
 // запрашиваем у пользователя какой ему нужен резлуьат
     cout << "Types of comparison of packages:" << '\n'
@@ -111,6 +117,6 @@ int start(){
     cin >> key_comp;
 
     serialization_File(map_pack,key_comp);
- 
+ */
     return 0;
 }
