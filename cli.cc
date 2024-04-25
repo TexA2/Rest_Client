@@ -9,36 +9,20 @@
 void help_text()
 {
     system("clear");
-   cout << "\e[1;32mdependencies/binary_package_dependencies/{pkghash} \e[0m" << '\n'
-   << "(pkghash* integer) Description: package hash" << "\n\n"
-
-    << "\e[1;32mexport/branch_binary_packages/{branch} \e[0m" << '\n'
+    cout << "\e[1;32mexport/branch_binary_packages/{branch} \e[0m" << '\n'
     << "(arch string ) Description: package architecture" << '\n'
-    << "(branch*  string) Description: branch name" << "\n\n"
-
-    << "\e[1;32msite/binary_package_archs_and_versions \e[0m" << '\n'
-    << "(branch* string) Description: branch name" << '\n'
-    << "(name* string) Description: binary package name" << "\n\n"
-
-    << "\e[1;32msite/binary_package_scripts/{pkghash} \e[0m" << '\n'
-    << "(pkghash* integer)" << "\n\n"
-
-    << "\e[1;32msite/pkghash_by_binary_name \e[0m" << '\n'
-    << "(arch*   string ) Description: package arch" << '\n'
-    << "(name*   string ) Description: package name" << '\n'
-    << "(branch* string)  Description: name of packageset"  << '\n' << endl;
-
+    << "(branch*  string) Description: branch name" << "\n\n" << endl;
 }
 
-void binary_package(string &uri, string name_file)
+void binary_package(string &uri, string name_file, string position)
 {
     system("clear");
     while (true)
     {
-        cout << "Enter  request " << '\n'
+        cout << "Enter a \e[1;31m"<< position <<"\e[0m request to the site \e[1;34m https://rdb.altlinux.org/api/\e[0m " << '\n'
         << "? - for to call help" << '\n'
         << "0: exit"<< '\n'
-        << "example: \e[1;32mexport/branch_binary_packages/p10\e[0m" << '\n'
+        << "example: \e[1;32mexport/branch_binary_packages/p10?arch=i586\e[0m" << '\n'
         << "->: ";
 
         cin >> uri;
@@ -66,7 +50,7 @@ int start()
 
     cout << "Choose an actuin" << '\n'
     << "1: Run a regular get request" << '\n'
-    << "2: Request for binary packages"<< '\n'
+    << "2: Request for binary packages 2 branches"<< '\n'
     << "0: exit"<< '\n'
     << "->: ";
 
@@ -77,7 +61,7 @@ int start()
 
     if (key == 1 )
     {
-        cout << "Enter a request to the site https://rdb.altlinux.org/api/ " << '\n'
+        cout << "Enter a request to the site \e[1;34m https://rdb.altlinux.org/api/\e[0m " << '\n'
         << "example: \e[1;32merrata/errata_branches\e[0m" << '\n'
         << "->: ";
 
@@ -89,22 +73,17 @@ int start()
     }
 
 
-// работаем с бинарными пакетами
     if (key == 2)
     {
-        binary_package(uri, "first");
-        binary_package(uri, "second");
-        exit(1); // убрать ведь дальше пойдет обратка пакетов и их сравнение
+        binary_package(uri, "first", "first");
+        binary_package(uri, "second", "second");
     }
-
-/*
-// если работаем с бинарными пакетами 
 
     map<Packages, int> map_pack;
 
 // выполняем десериализацию
-    Deserialization_File(map_pack, "first");
-    Deserialization_File(map_pack, "second", 2);
+    Deserialization_File(map_pack, "FIRST");
+    Deserialization_File(map_pack, "SECOND", 2);
 
 // запрашиваем у пользователя какой ему нужен резлуьат
     cout << "Types of comparison of packages:" << '\n'
@@ -117,6 +96,6 @@ int start()
     cin >> key_comp;
 
     serialization_File(map_pack,key_comp);
- */
+ 
     return 0;
 }
