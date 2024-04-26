@@ -5,13 +5,36 @@
 #include "cli.h"
 
 
+void Show_list_branch()
+{
+    cout << "\e[1;32mBranches:\e[0m \nsisyphus" << '\n' << "sisyphus_e2k" << '\n' << "sisyphus_mipsel" << '\n'
+    << "sisyphus_riscv64" << '\n'  << "sisyphus_loongarch64" << '\n' << "p10" << '\n'
+    << "p10_e2k" << '\n'  << "p9" << '\n'  << "p9_e2k" << '\n'  
+    << "p9_mipsel" << '\n'  << "p8" << '\n'  << "c10f1" << '\n' 
+    << "c9f2" << '\n'  << "c7" << endl;  
+}   
+
+void Show_list_arch()
+{
+    cout << "\e[1;32mArch:\e[0m \naarch64" << '\n' << "armh" << '\n' << "i586" << '\n'
+    << "noarch" << '\n'  << "ppc64le" << '\n' << "x86_64" << '\n'
+    << "x86_64-i586" << endl;  
+}
+
 
 void help_text()
 {
     system("clear");
     cout << "\e[1;32mexport/branch_binary_packages/{branch} \e[0m" << '\n'
     << "(arch string ) Description: package architecture" << '\n'
-    << "(branch*  string) Description: branch name" << "\n\n" << endl;
+    << "(branch*  string) Description: branch name" << "\n" << endl;
+
+    Show_list_branch();
+    cout << endl;
+
+    Show_list_arch();
+
+    cout << endl;
 }
 
 void binary_package(string &uri, string name_file, string position)
