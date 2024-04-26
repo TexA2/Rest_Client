@@ -36,10 +36,11 @@ After receiving responses from the server, 2 JSON files will be generated contai
 
 After that, a file named res.json will be created, which will contain a structure like the following:
 
+```
 {
-    "length:" 0,
-    "packExc1":[
-    {
+"length:" 0,
+"packExc1":[
+     {
       "name": "string",
       "epoch": 0,
       "version": "string",
@@ -75,9 +76,8 @@ After that, a file named res.json will be created, which will contain a structur
     }
     ]
 }
+``` 
 
- 
-
-packExc1 - All packages present in the 1st branch but not in the 2nd
-packExc2 - All packages present in the 2nd branch but not in the 1st
+packExc1 - All packages present in the 1st branch but not in the 2nd\
+packExc2 - All packages present in the 2nd branch but not in the 1st\
 packNewest1 - All packages whose version-release is greater in the 1st branch than in the 2n
