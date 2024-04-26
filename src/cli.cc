@@ -88,8 +88,8 @@ int start()
     map<Packages, int> map_pack;
 
 // выполняем десериализацию
-    Deserialization_File(map_pack, "FIRST");
-    Deserialization_File(map_pack, "SECOND", 2);
+    Deserialization_File(map_pack, "first");
+    Deserialization_File(map_pack, "second", 2);
 
 // запрашиваем у пользователя какой ему нужен резлуьат
     cout << "Types of comparison of packages:" << '\n'
