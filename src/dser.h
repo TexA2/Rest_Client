@@ -34,13 +34,8 @@ void Deserialization_File (map<Packages, int> &map_pack, string branch, int numb
 // number - номер запроса (1 - первый запрос т.е рабоать с первой веткой), 2- второй запрос т.е работать со второй веткой
 
 
-void serialization_File(map<Packages, int> &map_pack, int status);
+void serialization_File(map<Packages, int> &map_pack);
 // map_pack -  ссылка на объект map<Packages, int>
 // status какую сортировку нам вывести :
-/*1 - пакет существует только в первой ветке
-2 - пакет существует только во второй ветке
-3 - пакет существует в 1 и 2, но version_release  больше в 1
-4 - пакет существует в 1 и 2, но version_release  больше в 2
-*/
 
 #endif

@@ -31,11 +31,53 @@ and the contents can be viewed using the command:
 ``` cat res.json ```
 2) The user will be able to compare the results of the requests made to the endpoint "export/branch_binary_packages/{branch}". 
 Initially, a request will need to be sent for the first branch, 
-followed by a request for the second branch, and then the user can select the comparison type.
-after the request is completed, 2 files will be saved first.json , second.json
+followed by a request for the second branch.
+After receiving responses from the server, 2 JSON files will be generated containing the answers to the requests: first.json and second.json.
+
+After that, a file named res.json will be created, which will contain a structure like the following:
+
+{
+    "length:" 0,
+    "packExc1":[
+    {
+      "name": "string",
+      "epoch": 0,
+      "version": "string",
+      "release": "string",
+      "arch": "string",
+      "disttag": "string",
+      "buildtime": 0,
+      "source": "string"
+    }
+    ],
+    "packExc2":[
+    {
+      "name": "string",
+      "epoch": 0,
+      "version": "string",
+      "release": "string",
+      "arch": "string",
+      "disttag": "string",
+      "buildtime": 0,
+      "source": "string"
+    }
+    ],
+    "packNewest1":[
+    {
+      "name": "string",
+      "epoch": 0,
+      "version": "string",
+      "release": "string",
+      "arch": "string",
+      "disttag": "string",
+      "buildtime": 0,
+      "source": "string"
+    }
+    ]
+}
+
  
-Once the files are downloaded, the user will be prompted to choose the type of comparison between two branches:
- 
-1) All packages present in the 1st branch but not in the 2nd
-2) All packages present in the 2nd branch but not in the 1st
-3) All packages whose version-release is greater in the 1st branch than in the 2n
+
+packExc1 - All packages present in the 1st branch but not in the 2nd
+packExc2 - All packages present in the 2nd branch but not in the 1st
+packNewest1 - All packages whose version-release is greater in the 1st branch than in the 2n

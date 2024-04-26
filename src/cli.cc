@@ -60,8 +60,6 @@ void binary_package(string &uri, string name_file, string position)
 
         string query = url+uri;
         getRequest(name_file,  query);
-
-        cout << "A file responses has been generated" << name_file<< ".json" << endl;
         return;
     }
 }
@@ -95,7 +93,6 @@ int start()
         return 1;
     }
 
-
     if (key == 2)
     {
         binary_package(uri, "first", "first");
@@ -110,21 +107,10 @@ int start()
 
     map<Packages, int> map_pack;
 
-// выполняем десериализацию
     Deserialization_File(map_pack, "first");
     Deserialization_File(map_pack, "second", 2);
 
-// запрашиваем у пользователя какой ему нужен резлуьат
-    cout << "Types of comparison of packages:" << '\n'
-    << "1: all packages that are in the 1st, but not in the 2nd;" << '\n'
-    << "2: all packages that are in the 2nd, but not in the 1st;" << '\n'
-    << "3: all packages ,version-release that are most similar to the 1st and 2nd" << '\n'
-    << "->: "; 
-    
-    int key_comp;
-    cin >> key_comp;
-
-    serialization_File(map_pack,key_comp);
+    serialization_File(map_pack);
  
     return 0;
 }

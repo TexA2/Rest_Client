@@ -9,7 +9,7 @@
 
 void Deserialization_File (map<Packages, int> &map_pack, string branch, int number)  
 {
-    ifstream file(branch + ".json");   // открываем файл
+    ifstream file(branch + ".json");        // открываем файл
     nlohmann::json j;                       // создаем json объект 
     j = nlohmann::json::parse(file);        // парсим его
 
@@ -47,33 +47,40 @@ void Deserialization_File (map<Packages, int> &map_pack, string branch, int numb
     file.close();
 }
 
-void serialization_File(map<Packages, int> &map_pack, int status)
+void serialization_File(map<Packages, int> &map_pack)
 {
     ofstream file("res.json");
     nlohmann::json j;
+    nlohmann::json temp;
     string str;
+
+    j["length"] = map_pack.size();
+
+    j["packExc1"] = nlohmann::json::array(); // Пустой массив пакетов которые только в первом запросе
+    j["packExc1"] = nlohmann::json::array(); // пустой массив пектов которые только во втором запросе
+    j["packNewest1"]    = nlohmann::json::array(); // пустой массив пакетов чей версия-релиз больше чем во 2
+
 
     for (auto it = map_pack.begin() ; it != map_pack.end(); ++it)
     {
-       if (it->second == status) 
-       {
-            j["name"]= it->first.name;
-            j["epoch"] = it->first.epoch;
-            j["version"] = it->first.version;
-            j["release"] = it->first.release;
-            j["arch"] = it->first.arch;
-            j["disttag"] = it->first.disttag;
-            j["buildtime"] = it->first.buildtime;
-            j["source"] = it->first.source;
+        temp["name"]= it->first.name;
+        temp["epoch"] = it->first.epoch;
+        temp["version"] = it->first.version;
+        temp["release"] = it->first.release;
+        temp["arch"] = it->first.arch;
+        temp["disttag"] = it->first.disttag;
+        temp["buildtime"] = it->first.buildtime;
+        temp["source"] = it->first.source;
 
-            str = j.dump();
-
-            file << str << '\n';
-
-            cout << str << endl;
-       }
+       if (it->second == 1) j["packExc1"].push_back(temp);
+       if (it->second == 2) j["packExc2"].push_back(temp);
+       if (it->second == 3) j["packNewest1"].push_back(temp);
     }
 
-    cout << "A file responses has been generated res.json" << endl;
+    str = j.dump();
+
+    file << str << '\n';    
     file.close();
+
+    cout << "A file responses has been generated res.json" << endl;
 }
