@@ -19,18 +19,20 @@ Switch to superuser mode by using the command (su-)
 2) Navigate to the project directory
 3) Run the utility  using the make command:
 ``` make ```
+4)Start the program with the command 
+```  ./start ``` 
 
  
 **Interacting with the program:**
-To start the program, run it from the project folder using the command
-``` ./start``` 
 
-the program asks to chooose the operating mode:
-1) The user writes a full Get request to the server and the received response is written to a file res.json
-2) The user works with the method (export/branch_binary_packages/{branch}) 
-and writes the full request to this method.
-The user is required to form 2 requests. 
-When the requests are sent, the response is saved to files.
+During operation, the user will have the ability to work in different modes:
+1) The user can send any GET request. The execution result of the request will be saved in the file "res.json",
+and the contents can be viewed using the command:
+``` cat res.json ```
+2) The user will be able to compare the results of the requests made to the endpoint "export/branch_binary_packages/{branch}". 
+Initially, a request will need to be sent for the first branch, 
+followed by a request for the second branch, and then the user can select the comparison type.
+after the request is completed, 2 files will be saved first.json , second.json
  
 Once the files are downloaded, the user will be prompted to choose the type of comparison between two branches:
  

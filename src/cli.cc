@@ -79,6 +79,12 @@ int start()
         binary_package(uri, "second", "second");
     }
 
+    if ((key != 2) and (key != 1))
+    {
+        cout << "Invalid value, close programm" << endl; 
+        exit(1); 
+    }
+
     map<Packages, int> map_pack;
 
 // выполняем десериализацию
