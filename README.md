@@ -5,10 +5,10 @@ Utility for querying 2 branches with lists of binary packages (export/branch_bin
 
 **Preparation**
 For the correct compilation of the project, the libraries curl and nlohmann must be installed.
-Switch to superuser mode by using the command (su-)
-``` apt-get install nlohmann-json-devel ```
-``` apt-get install curl ```
-``` apt-get install libcurl ```
+Switch to superuser mode by using the command (su-)\
+``` apt-get install nlohmann-json-devel ```\
+``` apt-get install curl ```\
+``` apt-get install libcurl ```\
 ``` apt-get install libcurl-devel ```
 
  
@@ -19,7 +19,7 @@ Switch to superuser mode by using the command (su-)
 2) Navigate to the project directory
 3) Run the utility  using the make command:
 ``` make ```
-4)Start the program with the command 
+4) Start the program with the command 
 ```  ./start ``` 
 
  
